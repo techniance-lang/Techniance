@@ -15,7 +15,7 @@ export const PRO = {
   },
 } as const;
 
-/** What a free account can reach. Everything else needs Pro (only when billing is enabled). */
+/** What a free account can reach (plus the first unit of every course). Everything else needs Pro (only when billing is enabled). */
 export const FREE_TIER = {
   levels: ["Beginner"] as Level[],
   problemDifficulties: ["easy"] as Difficulty[],
@@ -25,7 +25,7 @@ export const FREE_TIER = {
 export const PRO_FEATURES = [
   { icon: "🔓", title: "Every course, every level", body: "Unlock all Intermediate and Advanced units in all 10 courses." },
   { icon: "❤️", title: "Unlimited hearts", body: "Mistakes are how you learn — keep going without waiting." },
-  { icon: "🧩", title: "The full practice arena", body: "Medium and hard contest problems in 7 languages." },
+  { icon: "🧩", title: "The full practice arena", body: "Every medium and hard contest problem, with hidden tests." },
   { icon: "🎓", title: "Certificates", body: "Earn a shareable certificate when you finish a course." },
   { icon: "🛡️", title: "Weekly streak freeze", body: "A free streak freeze every week to protect your streak." },
   { icon: "💜", title: "Pro badge", body: "Stand out on leaderboards and your profile." },

@@ -798,11 +798,21 @@ def orchard_case(r, c, q):
     return lines(f"{r} {c}", *g, q, *qs)
 
 
-def groups_case(n, q, join_share):
+def groups_case(n, q, join_share, communities):
+    # People secretly belong to communities; joins mostly happen inside one, so asks get a healthy mix of YES and NO.
+    home = [R.randrange(communities) for _ in range(n + 1)]
+    members = [[] for _ in range(communities)]
+    for v in range(1, n + 1):
+        members[home[v]].append(v)
     ops = []
     for _ in range(q):
         op = "+" if R.random() < join_share else "?"
-        ops.append(f"{op} {R.randint(1, n)} {R.randint(1, n)}")
+        a = R.randint(1, n)
+        if R.random() < (0.97 if op == "+" else 0.6):
+            b = R.choice(members[home[a]])
+        else:
+            b = R.randint(1, n)
+        ops.append(f"{op} {a} {b}")
     return lines(f"{n} {q}", *ops)
 
 
@@ -921,7 +931,7 @@ PROBLEMS_2 = {
             r_matrix(2, 7),
             r_matrix(7, 2),
             r_matrix(20, 13),
-            r_matrix(37, 41),
+            r_matrix(31, 29),
         ],
     ),
     "shift-cipher": (
@@ -1033,7 +1043,7 @@ PROBLEMS_2 = {
             lines("1 1", "7", 2, "1 1 1 1", "1 1 1 1"),
             lines("2 3", "999", "999", 3, "1 1 2 3", "2 2 2 2", "1 3 2 3"),
             orchard_case(50, 80, 300),
-            orchard_case(100, 100, 700),
+            orchard_case(80, 90, 500),
         ],
     ),
     "study-groups": (
@@ -1043,8 +1053,8 @@ PROBLEMS_2 = {
             lines("1 1", "? 1 1"),
             lines("3 2", "+ 1 1", "? 2 3"),
             lines("4 4", "+ 1 2", "+ 3 4", "+ 1 2", "? 4 3"),
-            groups_case(30, 60, 0.4),
-            groups_case(800, 1500, 0.3),
+            groups_case(30, 60, 0.4, 4),
+            groups_case(600, 1000, 0.6, 12),
             chain_groups_case(1000),
         ],
     ),
@@ -1111,8 +1121,8 @@ PROBLEMS_2 = {
             lines("4 2", "1 2 1", "3 4 1"),
             lines("300 299", *(f"{v} {v + 1} 1000000000" for v in range(1, 300))),
             road_case(40, 80, 1, 50),
-            road_case(400, 1000, 1, 1000),
-            road_case(300, 800, 1, 10**9),
+            road_case(300, 700, 1, 1000),
+            road_case(200, 500, 1, 10**9),
             road_case(300, 600, 1, 100, connected=False),
         ],
     ),

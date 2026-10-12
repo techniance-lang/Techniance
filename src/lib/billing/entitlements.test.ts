@@ -1,15 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { accessFor, canAccessLevel, canAccessProblem, hasUnlimitedHearts, isPro } from "./entitlements";
+import { accessFor, canAccessLevel, canAccessProblem, canAccessUnit, hasUnlimitedHearts, isPro } from "./entitlements";
 
 const DAY = 24 * 60 * 60 * 1000;
 
 describe("entitlements", () => {
   const now = 1_800_000_000_000;
-  it("treats proUntil in the future (plus grace) as Pro", () => {
+  it("treats proUntil in the future as Pro, with no grace after it ends", () => {
     expect(isPro({ proUntil: now + DAY }, now)).toBe(true);
-    expect(isPro({ proUntil: now - DAY }, now)).toBe(true); // within 3-day grace
-    expect(isPro({ proUntil: now - 4 * DAY }, now)).toBe(false);
+    expect(isPro({ proUntil: now - 1 }, now)).toBe(false);
     expect(isPro({ proUntil: 0 }, now)).toBe(false);
+  });
+
+  it("keeps the first unit of every course free", () => {
+    const free = accessFor({ proUntil: 0 }, true, now);
+    expect(canAccessUnit(free, { level: "Intermediate" }, 0)).toBe(true);
+    expect(canAccessUnit(free, { level: "Intermediate" }, 1)).toBe(false);
+    expect(canAccessUnit(free, { level: "Beginner" }, 3)).toBe(true);
   });
 
   it("opens everything when billing is disabled", () => {

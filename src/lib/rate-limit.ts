@@ -4,18 +4,19 @@ import { getDb, schema } from "./db";
 
 /**
  * Fixed-window rate limiter stored in the database, so it works across
- * serverless instances. Returns whether this hit is allowed.
+ * serverless instances. Returns whether this hit is allowed. `cost` lets one
+ * request consume several units (e.g. one judge run per test input).
  *
  *   const ok = await rateLimit(`login:${ip}`, 10, 15 * 60_000);
  */
-export async function rateLimit(key: string, limit: number, windowMs: number): Promise<{ ok: boolean; retryAfterSec: number }> {
+export async function rateLimit(key: string, limit: number, windowMs: number, cost = 1): Promise<{ ok: boolean; retryAfterSec: number }> {
   const db = await getDb();
   const now = Date.now();
   const windowStart = Math.floor(now / windowMs) * windowMs;
   const rows = await db
     .insert(schema.rateLimits)
-    .values({ key, windowStart, count: 1 })
-    .onConflictDoUpdate({ target: [schema.rateLimits.key, schema.rateLimits.windowStart], set: { count: sql`${schema.rateLimits.count} + 1` } })
+    .values({ key, windowStart, count: cost })
+    .onConflictDoUpdate({ target: [schema.rateLimits.key, schema.rateLimits.windowStart], set: { count: sql`${schema.rateLimits.count} + ${cost}` } })
     .returning({ count: schema.rateLimits.count });
   // Opportunistic cleanup of old windows (cheap, indexed by primary key prefix).
   if (Math.random() < 0.02) {
