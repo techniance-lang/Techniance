@@ -1,4 +1,5 @@
 import type { Course } from "../types";
+import { javascriptMoreUnits, jsSwitchLesson } from "./javascript-more";
 
 export const javascript: Course = {
   slug: "javascript",
@@ -6,15 +7,16 @@ export const javascript: Course = {
   language: "javascript",
   tagline: "The language of the web.",
   description:
-    "Learn the language that powers every browser. Master values, strings, conditionals, loops, arrays, objects and functions — then put them to work in real challenges.",
+    "Learn the language that powers every browser — from your first console.log to classes, closures, Map/Set, error handling, JSON, Promises and async/await. Every concept ends with a real challenge.",
   color: "#ffc93c",
   emoji: "⚡",
-  level: "Beginner",
+  level: "Beginner → Advanced",
   units: [
     {
       id: "js-u1",
       title: "First Steps",
       description: "Output, variables and numbers.",
+      level: "Beginner",
       lessons: [
         {
           id: "js-1-1",
@@ -150,6 +152,7 @@ export const javascript: Course = {
       id: "js-u2",
       title: "Strings & Input",
       description: "Text methods and reading input.",
+      level: "Beginner",
       lessons: [
         {
           id: "js-2-1",
@@ -240,6 +243,7 @@ export const javascript: Course = {
       id: "js-u3",
       title: "Control Flow",
       description: "Conditions, comparisons and loops.",
+      level: "Beginner",
       lessons: [
         {
           id: "js-3-1",
@@ -332,12 +336,14 @@ export const javascript: Course = {
             },
           ],
         },
+        jsSwitchLesson,
       ],
     },
     {
       id: "js-u4",
       title: "Arrays, Objects & Functions",
       description: "Structure data and write reusable code.",
+      level: "Beginner",
       lessons: [
         {
           id: "js-4-1",
@@ -480,5 +486,6 @@ export const javascript: Course = {
         },
       ],
     },
+    ...javascriptMoreUnits,
   ],
 };

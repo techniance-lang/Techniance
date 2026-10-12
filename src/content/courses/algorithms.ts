@@ -1,4 +1,5 @@
 import type { Course } from "../types";
+import { algorithmsMoreUnits } from "./algorithms-more";
 
 export const algorithms: Course = {
   slug: "algorithms",
@@ -6,15 +7,16 @@ export const algorithms: Course = {
   language: "python",
   tagline: "Think like a competitive programmer.",
   description:
-    "Big-O, searching, sorting, two pointers, prefix sums and recursion — the toolkit behind every contest problem. Taught in Python. Finish Python Fundamentals first for the smoothest ride.",
+    "The toolkit behind every contest problem: Big-O, searching, sorting, recursion, stacks and heaps, graphs with BFS/DFS, dynamic programming, sliding windows, greedy algorithms and bit tricks. Taught in Python — finish the first units of Python Fundamentals first.",
   color: "#a26bff",
   emoji: "🧠",
-  level: "Intermediate",
+  level: "Intermediate → Advanced",
   units: [
     {
       id: "algo-u1",
       title: "Efficiency",
       description: "Measure and speed up your code.",
+      level: "Intermediate",
       lessons: [
         {
           id: "algo-1-1",
@@ -139,6 +141,7 @@ export const algorithms: Course = {
       id: "algo-u2",
       title: "Search & Recursion",
       description: "Binary search, sorting and recursive thinking.",
+      level: "Intermediate",
       lessons: [
         {
           id: "algo-2-1",
@@ -265,5 +268,6 @@ export const algorithms: Course = {
         },
       ],
     },
+    ...algorithmsMoreUnits,
   ],
 };

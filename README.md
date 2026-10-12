@@ -7,7 +7,10 @@ All code runs **in the learner's browser** — JavaScript in a Web Worker and Py
 ## Features
 
 **Learning**
-- 3 courses (Python Fundamentals, JavaScript Essentials, Algorithms & Problem Solving), 28 lessons
+- 3 courses, 26 units, 73 lessons, each unit tagged Beginner, Intermediate or Advanced:
+  - **Python Fundamentals** (Beginner → Advanced, 28 lessons): print, variables, strings, input, conditions, loops, lists, dicts, functions → tuples, sets, comprehensions, *args/**kwargs, lambdas, exceptions, files → classes, inheritance, magic methods, generators, decorators, `collections`/`itertools`, dataclasses and type hints
+  - **JavaScript Essentials** (Beginner → Advanced, 26 lessons): console.log, let/const, strings, input, conditions, switch, loops, arrays, objects, functions → destructuring, spread/rest, `?.`/`??`, callbacks, closures, array methods → classes, inheritance, `this` and prototypes, Map/Set, errors, JSON, the event loop, Promises and async/await
+  - **Algorithms & Problem Solving** (Intermediate → Advanced, 19 lessons): Big-O, prefix sums, two pointers, binary search, sorting, recursion → stacks, queues, hash maps, heaps → graphs (BFS/DFS), dynamic programming, sliding window, greedy, binary search on the answer, bit manipulation
 - Lessons mix 5 exercise types: concept cards, multiple choice, fill-in-the-blank word banks, line ordering (Parsons problems) and real coding challenges checked against tests
 - Winding Duolingo-style learning path; lessons unlock in order, perfect lessons turn gold
 - Mistakes come back at the end of the lesson; hint and solution reveal on coding steps
@@ -66,7 +69,7 @@ npm run db:seed    # demo accounts use the password demo1234
 | --- | --- |
 | `npm run dev` / `build` / `start` | Next.js dev server, production build, production server |
 | `npm run lint` / `typecheck` | ESLint and TypeScript checks |
-| `npm run verify` | Validates all course content and runs every lesson's reference solution against its tests |
+| `npm run verify` | Validates all course content and runs every lesson's reference solution against its tests (Python 3 and Node) |
 | `npm run gen:tests` | Regenerates `src/content/problem-tests.json` from the reference solutions in `scripts/gen_tests.py` |
 | `npm run db:seed` | Adds demo learners |
 | `npm run db:push` | Pushes the Drizzle schema with drizzle-kit (optional; tables are auto-created) |

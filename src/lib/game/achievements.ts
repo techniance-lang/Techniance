@@ -27,6 +27,7 @@ export const ACHIEVEMENTS: AchievementDef[] = [
   { key: "first-lesson", title: "First Steps", description: "Complete your first lesson", icon: "👣", gems: 20, progress: (s) => t(s.lessonsCompleted, 1) },
   { key: "lessons-10", title: "Bookworm", description: "Complete 10 lessons", icon: "📚", gems: 50, progress: (s) => t(s.lessonsCompleted, 10) },
   { key: "lessons-25", title: "Scholar", description: "Complete 25 lessons", icon: "🎓", gems: 100, progress: (s) => t(s.lessonsCompleted, 25) },
+  { key: "lessons-50", title: "Marathoner", description: "Complete 50 lessons", icon: "🏃", gems: 200, progress: (s) => t(s.lessonsCompleted, 50) },
   { key: "perfect-5", title: "Perfectionist", description: "Finish 5 lessons without a mistake", icon: "💎", gems: 50, progress: (s) => t(s.perfectLessons, 5) },
   { key: "streak-3", title: "Warming Up", description: "Reach a 3-day streak", icon: "🔥", gems: 20, progress: (s) => t(s.longestStreak, 3) },
   { key: "streak-7", title: "Week Warrior", description: "Reach a 7-day streak", icon: "⚔️", gems: 50, progress: (s) => t(s.longestStreak, 7) },

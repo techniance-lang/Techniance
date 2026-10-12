@@ -58,10 +58,13 @@ export interface Lesson {
   steps: Step[];
 }
 
+export type Level = "Beginner" | "Intermediate" | "Advanced";
+
 export interface Unit {
   id: string;
   title: string;
   description: string;
+  level: Level;
   lessons: Lesson[];
 }
 
@@ -74,7 +77,8 @@ export interface Course {
   /** Accent color for the course (hex). */
   color: string;
   emoji: string;
-  level: "Beginner" | "Intermediate";
+  /** Range shown on course cards, e.g. "Beginner → Advanced". */
+  level: string;
   units: Unit[];
 }
 

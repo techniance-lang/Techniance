@@ -17,13 +17,25 @@ function inspect(value, depth = 0, nested = false) {
   if (value instanceof Set) return `Set(${value.size}) { ${[...value].map((v) => inspect(v, depth + 1, true)).join(", ")} }`;
   if (value instanceof Map)
     return `Map(${value.size}) { ${[...value].map(([k, v]) => `${inspect(k, depth + 1, true)} => ${inspect(v, depth + 1, true)}`).join(", ")} }`;
+  if (value instanceof Promise) return "Promise { <pending> }";
   const keys = Object.keys(value);
-  if (!keys.length) return "{}";
+  const ctor = value.constructor && value.constructor !== Object ? `${value.constructor.name} ` : "";
+  if (!keys.length) return `${ctor}{}`;
   const key = (k) => (/^[A-Za-z_$][\w$]*$/.test(k) ? k : `'${k}'`);
-  return `{ ${keys.map((k) => `${key(k)}: ${inspect(value[k], depth + 1, true)}`).join(", ")} }`;
+  return `${ctor}{ ${keys.map((k) => `${key(k)}: ${inspect(value[k], depth + 1, true)}`).join(", ")} }`;
 }
 
-self.onmessage = (event) => {
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+const realSetTimeout = setTimeout;
+const sleep = (ms) => new Promise((r) => realSetTimeout(r, ms));
+let current = null; // state of the run in progress (one at a time per worker)
+
+self.addEventListener("unhandledrejection", (e) => {
+  e.preventDefault();
+  if (current && !current.error) current.fail(e.reason);
+});
+
+self.onmessage = async (event) => {
   const { id, code, input } = event.data;
   let stdout = "";
   const write = (s) => {
@@ -36,12 +48,13 @@ self.onmessage = (event) => {
   let cursor = 0;
   const readline = () => (cursor < lines.length ? lines[cursor++] : undefined);
   const fakeConsole = { log, info: log, warn: log, error: log, debug: log, table: log };
+  const EXIT = { __exit: true };
   const fakeProcess = {
     stdout: { write: (s) => (write(String(s)), true) },
     argv: [],
     env: {},
     exit: () => {
-      throw { __exit: true };
+      throw EXIT;
     },
   };
   const fakeRequire = (name) => {
@@ -49,15 +62,57 @@ self.onmessage = (event) => {
     throw new Error(`Cannot find module '${name}' (only 'fs' stdin reading is available)`);
   };
 
+  const state = {
+    error: null,
+    exited: false,
+    fail(e) {
+      if (e === EXIT) {
+        state.exited = true;
+        return;
+      }
+      if (state.error) return;
+      state.error = e instanceof Error ? `${e.name}: ${e.message}` : `Uncaught ${inspect(e)}`;
+    },
+  };
+  current = state;
+
+  // Timers are tracked so the run only ends once all scheduled callbacks have fired.
+  const pending = new Map();
+  const schedule = (repeat) => (cb, ms = 0, ...args) => {
+    const handle = (repeat ? setInterval : setTimeout)(() => {
+      if (!repeat) pending.delete(handle);
+      if (state.error || state.exited) return;
+      try {
+        cb(...args);
+      } catch (e) {
+        state.fail(e);
+      }
+    }, ms);
+    pending.set(handle, repeat);
+    return handle;
+  };
+  const clear = (handle) => {
+    if (!pending.has(handle)) return;
+    (pending.get(handle) ? clearInterval : clearTimeout)(handle);
+    pending.delete(handle);
+  };
+
   const started = performance.now();
-  let error = null;
   try {
-    const fn = new Function("console", "readline", "require", "process", "print", "input", code);
-    fn(fakeConsole, readline, fakeRequire, fakeProcess, log, readline);
+    const fn = new AsyncFunction(
+      "console", "readline", "require", "process", "print", "input",
+      "setTimeout", "setInterval", "clearTimeout", "clearInterval",
+      code,
+    );
+    await fn(fakeConsole, readline, fakeRequire, fakeProcess, log, readline, schedule(false), schedule(true), clear, clear);
   } catch (e) {
-    if (!(e && e.__exit)) {
-      error = e instanceof Error ? `${e.name}: ${e.message}` : `Uncaught ${inspect(e)}`;
-    }
+    state.fail(e);
   }
-  self.postMessage({ id, stdout, error, ms: Math.round(performance.now() - started) });
+  // Let promise chains and timers finish (an endless interval hits the time limit).
+  await sleep(0);
+  while (pending.size && !state.error && !state.exited) await sleep(1);
+  await sleep(0);
+  for (const [h, repeat] of pending) (repeat ? clearInterval : clearTimeout)(h);
+  current = null;
+  self.postMessage({ id, stdout, error: state.error, ms: Math.round(performance.now() - started) });
 };

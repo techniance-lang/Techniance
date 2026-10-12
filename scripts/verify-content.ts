@@ -16,7 +16,8 @@ const input = require("fs").readFileSync(0, "utf8");
 const lines = input.split("\\n"); let i = 0;
 const readline = () => (i < lines.length ? lines[i++] : undefined);
 const req = (m) => { if (m === "fs") return { readFileSync: () => input }; throw new Error("no module " + m); };
-new Function("readline", "require", code)(readline, req);
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+new AsyncFunction("readline", "require", code)(readline, req).catch((e) => { console.error(e); process.exitCode = 1; });
 `;
 
 function run(language: Language, code: string, input: string) {
@@ -25,8 +26,8 @@ function run(language: Language, code: string, input: string) {
   writeFileSync(file, code);
   const r =
     language === "python"
-      ? spawnSync("python3", [file], { input, encoding: "utf8", timeout: 10_000 })
-      : spawnSync("node", ["-e", JS_HARNESS, file], { input, encoding: "utf8", timeout: 10_000 });
+      ? spawnSync("python3", [file], { input, encoding: "utf8", timeout: 10_000, cwd: dir })
+      : spawnSync("node", ["-e", JS_HARNESS, file], { input, encoding: "utf8", timeout: 10_000, cwd: dir });
   return { stdout: r.stdout ?? "", stderr: r.stderr ?? "" };
 }
 

@@ -5,7 +5,7 @@ import type { User } from "@/lib/db/schema";
 import { lessonProgressFor } from "@/lib/progress";
 import { getShellData } from "@/lib/shell";
 import { Mascot } from "./brand";
-import { CoursePath } from "./course-path";
+import { CoursePath, LEVEL_ICON } from "./course-path";
 import { RightRail } from "./shell";
 import { ProgressBar } from "./ui";
 
@@ -14,6 +14,13 @@ export async function CoursePage({ user, course }: { user: User; course: Course 
   const lessons = courseLessons(course);
   const done = lessons.filter((l) => progress.completed.has(l.id)).length;
   const next = nextLessonId(course, progress.completed);
+  const levels = (["Beginner", "Intermediate", "Advanced"] as const)
+    .map((level) => {
+      const units = course.units.filter((u) => u.level === level);
+      const unitLessons = units.flatMap((u) => u.lessons);
+      return { level, first: units[0]?.id, units: units.length, done: unitLessons.filter((l) => progress.completed.has(l.id)).length, total: unitLessons.length };
+    })
+    .filter((l) => l.units > 0);
 
   return (
     <div className="mx-auto flex max-w-[1100px] gap-10 px-4 pt-6 lg:px-8">
@@ -35,6 +42,19 @@ export async function CoursePage({ user, course }: { user: User; course: Course 
             </div>
           </div>
         </div>
+
+        <nav aria-label="Course levels" className="mx-auto mb-10 grid max-w-xl gap-2" style={{ gridTemplateColumns: `repeat(${levels.length}, minmax(0, 1fr))` }}>
+          {levels.map((l) => (
+            <a key={l.level} href={`#${l.first}`} className="card px-3 py-2.5 transition hover:bg-surface-2">
+              <div className="text-sm font-black">
+                {LEVEL_ICON[l.level]} {l.level}
+              </div>
+              <div className="mt-0.5 text-xs font-bold text-muted">
+                {l.units} unit{l.units === 1 ? "" : "s"} · {l.done}/{l.total} lessons
+              </div>
+            </a>
+          ))}
+        </nav>
 
         {!next && (
           <div className="mx-auto mb-10 max-w-xl rounded-2xl border-2 border-gold bg-[color-mix(in_srgb,var(--gold)_12%,transparent)] p-5 text-center">

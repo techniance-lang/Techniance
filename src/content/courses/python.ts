@@ -1,4 +1,5 @@
 import type { Course } from "../types";
+import { pythonMoreUnits } from "./python-more";
 
 export const python: Course = {
   slug: "python",
@@ -6,15 +7,16 @@ export const python: Course = {
   language: "python",
   tagline: "The friendliest first language.",
   description:
-    "Go from zero to writing real programs. Learn variables, strings, decisions, loops, lists, dictionaries and functions with hands-on challenges that run right in your browser.",
+    "Go from your first print() to classes, generators and decorators. Variables, strings, loops, collections, functions, errors, files, object-oriented design and the standard library — with hands-on challenges that run right in your browser.",
   color: "#3d8bff",
   emoji: "🐍",
-  level: "Beginner",
+  level: "Beginner → Advanced",
   units: [
     {
       id: "py-u1",
       title: "Hello, Python",
       description: "Print output, store values, do math.",
+      level: "Beginner",
       lessons: [
         {
           id: "py-1-1",
@@ -157,6 +159,7 @@ export const python: Course = {
       id: "py-u2",
       title: "Text & Input",
       description: "Work with strings and read what the user types.",
+      level: "Beginner",
       lessons: [
         {
           id: "py-2-1",
@@ -304,6 +307,7 @@ export const python: Course = {
       id: "py-u3",
       title: "Decisions & Loops",
       description: "Make your programs choose and repeat.",
+      level: "Beginner",
       lessons: [
         {
           id: "py-3-1",
@@ -448,6 +452,7 @@ export const python: Course = {
       id: "py-u4",
       title: "Lists, Dicts & Functions",
       description: "Organize data and reuse code.",
+      level: "Beginner",
       lessons: [
         {
           id: "py-4-1",
@@ -594,5 +599,6 @@ export const python: Course = {
         },
       ],
     },
+    ...pythonMoreUnits,
   ],
 };
