@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DAILY_GOALS } from "@/lib/game/rules";
 import { MascotSays } from "./brand";
+import { CourseBadge } from "./course-badge";
 import { ProgressBar } from "./ui";
 
 interface CourseCard {
@@ -64,9 +65,7 @@ export function Onboarding({ name, courses }: { name: string; courses: CourseCar
                   data-selected={course === c.slug}
                   className="tile flex flex-col items-center p-5 text-center"
                 >
-                  <span className="grid size-20 place-items-center rounded-2xl text-5xl" style={{ background: `color-mix(in srgb, ${c.color} 22%, transparent)` }}>
-                    {c.emoji}
-                  </span>
+                  <CourseBadge course={c} size={80} />
                   <span className="mt-4 font-black text-fg">{c.title}</span>
                   <span className="mt-1 text-sm font-semibold text-muted">{c.tagline}</span>
                   <span className="mt-3 text-xs font-extrabold tracking-wide text-muted uppercase">

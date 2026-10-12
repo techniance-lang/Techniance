@@ -3,6 +3,7 @@ import { CalendarDays, Settings } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { HEATMAP_DAYS, Heatmap } from "@/components/heatmap";
+import { CourseBadge } from "@/components/course-badge";
 import { BoltIcon, FlameIcon, FreezeIcon, TrophyIcon } from "@/components/icons";
 import { Avatar, ProgressBar } from "@/components/ui";
 import { COURSES, courseLessons } from "@/content/courses";
@@ -100,7 +101,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ userna
           const done = lessons.filter((l) => progress.completed.has(l.id)).length;
           return (
             <div key={c.slug} className="card flex items-center gap-3 p-4">
-              <span className="text-3xl">{c.emoji}</span>
+              <CourseBadge course={c} size={40} />
               <div className="min-w-0 flex-1">
                 <div className="truncate text-sm font-black">{c.title}</div>
                 <div className="mt-1.5 flex items-center gap-2">

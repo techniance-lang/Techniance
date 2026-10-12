@@ -1,16 +1,22 @@
 import type { Course, Lesson, Unit } from "../types";
 import { algorithms } from "./algorithms";
+import { cpp } from "./cpp";
+import { go } from "./go";
+import { java } from "./java";
 import { javascript } from "./javascript";
 import { python } from "./python";
+import { rust } from "./rust";
+import { sql } from "./sql";
+import { typescript } from "./typescript";
+import { htmlCss } from "./web";
 
-export const COURSES: Course[] = [python, javascript, algorithms];
+export const COURSES: Course[] = [python, javascript, htmlCss, sql, typescript, java, cpp, go, rust, algorithms];
 
 /** Shown in the catalog so learners can see what's next on the roadmap. */
 export const UPCOMING_COURSES = [
-  { title: "C++ for Competitive Programming", emoji: "🚀", color: "#00599c" },
-  { title: "Java Foundations", emoji: "☕", color: "#e76f00" },
-  { title: "SQL & Databases", emoji: "🗄️", color: "#2ed47a" },
-  { title: "Rust Basics", emoji: "🦀", color: "#ff6b35" },
+  { title: "C# & .NET", emoji: "🎯", color: "#68217a" },
+  { title: "Kotlin for Android", emoji: "📱", color: "#7f52ff" },
+  { title: "Swift for iOS", emoji: "🍎", color: "#f05138" },
 ];
 
 export function getCourse(slug: string): Course | undefined {

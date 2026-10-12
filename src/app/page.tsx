@@ -1,6 +1,7 @@
 import { ArrowRight, Check, Code2, Crown, Play, Sparkles, Target, Zap } from "lucide-react";
 import Link from "next/link";
 import { Mascot } from "@/components/brand";
+import { CourseBadge } from "@/components/course-badge";
 import { BoltIcon, FlameIcon, GemIcon, HeartIcon, TrophyIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Logo } from "@/components/ui";
@@ -114,7 +115,7 @@ export default async function Landing() {
             {COURSES.map((c) => (
               <Link key={c.slug} href={user ? `/courses/${c.slug}` : "/signup"} className="card group overflow-hidden transition hover:-translate-y-1">
                 <div className="flex h-28 items-center justify-center text-6xl" style={{ background: `linear-gradient(135deg, ${c.color}, color-mix(in srgb, ${c.color} 55%, #000))` }}>
-                  <span className="transition group-hover:scale-110">{c.emoji}</span>
+                  <CourseBadge course={c} size={72} className="transition group-hover:scale-110" />
                 </div>
                 <div className="p-5">
                   <div className="text-xs font-extrabold tracking-wider text-muted uppercase">{c.level} · {lessonCount(c)} lessons</div>

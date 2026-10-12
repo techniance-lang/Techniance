@@ -5,6 +5,7 @@ import type { User } from "@/lib/db/schema";
 import { lessonProgressFor } from "@/lib/progress";
 import { getShellData } from "@/lib/shell";
 import { Mascot } from "./brand";
+import { CourseBadge } from "./course-badge";
 import { CoursePath, LEVEL_ICON } from "./course-path";
 import { RightRail } from "./shell";
 import { ProgressBar } from "./ui";
@@ -27,7 +28,7 @@ export async function CoursePage({ user, course }: { user: User; course: Course 
       <div className="min-w-0 flex-1">
         <div className="sticky top-[62px] z-20 -mx-4 mb-8 border-b-2 border-line bg-bg/90 px-4 py-3 backdrop-blur md:top-0">
           <div className="mx-auto flex max-w-xl items-center gap-4">
-            <span className="text-3xl">{course.emoji}</span>
+            <CourseBadge course={course} size={44} />
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">
                 <h1 className="truncate font-black">{course.title}</h1>

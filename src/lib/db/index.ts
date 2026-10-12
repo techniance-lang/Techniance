@@ -2,7 +2,7 @@ import "server-only";
 import { createClient, type Client } from "@libsql/client";
 import { drizzle, type LibSQLDatabase } from "drizzle-orm/libsql";
 import { mkdirSync } from "node:fs";
-import { MIGRATION } from "./migration";
+import { migrate } from "./migration";
 import * as schema from "./schema";
 
 type Db = LibSQLDatabase<typeof schema>;
@@ -28,9 +28,10 @@ function init() {
   }
   const client = createClient({ url, authToken: process.env.DATABASE_AUTH_TOKEN });
   const db = drizzle(client, { schema });
-  const ready = client
-    .executeMultiple(`PRAGMA foreign_keys = ON;${url.startsWith("file:") ? "PRAGMA journal_mode = WAL;" : ""}${MIGRATION}`)
-    .then(() => undefined);
+  const ready = (async () => {
+    await client.executeMultiple(`PRAGMA foreign_keys = ON;${url.startsWith("file:") ? "PRAGMA journal_mode = WAL;" : ""}`);
+    await migrate(client);
+  })();
   return { client, db, ready };
 }
 

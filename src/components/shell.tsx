@@ -1,6 +1,7 @@
 import { ChevronRight, Zap } from "lucide-react";
 import Link from "next/link";
 import type { User } from "@/lib/db/schema";
+import { CourseBadge } from "./course-badge";
 import { MAX_HEARTS } from "@/lib/game/rules";
 import { formatDuration, type ShellData } from "@/lib/shell";
 import { FlameIcon, GemIcon, HeartIcon, TrophyIcon } from "./icons";
@@ -10,8 +11,8 @@ export function StatBar({ user, shell }: { user: User; shell: ShellData }) {
   return (
     <div className="flex items-center justify-between gap-2 sm:gap-5">
       {shell.course && (
-        <Link href="/courses" className="grid size-10 place-items-center rounded-xl border-2 border-line text-2xl transition hover:bg-surface-2" title={shell.course.title}>
-          {shell.course.emoji}
+        <Link href="/courses" className="rounded-xl transition hover:scale-105" title={shell.course.title}>
+          <CourseBadge course={shell.course} size={38} />
         </Link>
       )}
       <Link

@@ -1,6 +1,7 @@
 import { Lock } from "lucide-react";
 import Link from "next/link";
 import { RightRail } from "@/components/shell";
+import { CourseBadge } from "@/components/course-badge";
 import { ProgressBar } from "@/components/ui";
 import { COURSES, UPCOMING_COURSES, courseLessons } from "@/content/courses";
 import { requireUser } from "@/lib/auth";
@@ -27,7 +28,7 @@ export default async function CoursesPage() {
             return (
               <Link key={c.slug} href={`/courses/${c.slug}`} className="card group flex flex-col overflow-hidden transition hover:-translate-y-1" style={current ? { borderColor: c.color } : undefined}>
                 <div className="relative flex h-28 items-center justify-center text-6xl" style={{ background: `linear-gradient(135deg, ${c.color}, color-mix(in srgb, ${c.color} 50%, #000))` }}>
-                  <span className="transition group-hover:scale-110">{c.emoji}</span>
+                  <CourseBadge course={c} size={72} className="transition group-hover:scale-110" />
                   {current && <span className="absolute top-3 right-3 rounded-full bg-white/90 px-2.5 py-0.5 text-xs font-black text-black">CURRENT</span>}
                 </div>
                 <div className="flex flex-1 flex-col p-5">

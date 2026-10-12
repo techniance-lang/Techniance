@@ -22,7 +22,8 @@ export function LessonPlayer({
   steps,
   language,
   initialHearts,
-  practice,
+  practice: isReplay,
+  unlimitedHearts = false,
   exitHref,
 }: {
   lessonId: string;
@@ -32,9 +33,12 @@ export function LessonPlayer({
   initialHearts: number;
   /** Replays of completed lessons don't cost hearts. */
   practice: boolean;
+  /** Pro members never lose hearts. */
+  unlimitedHearts?: boolean;
   exitHref: string;
 }) {
   const router = useRouter();
+  const practice = isReplay || unlimitedHearts;
   // Queue of step indices; questions answered wrong are re-queued at the end.
   const [queue, setQueue] = useState<number[]>(() => steps.map((_, i) => i));
   const [pos, setPos] = useState(0);
@@ -197,7 +201,7 @@ export function LessonPlayer({
         >
           {muted ? <VolumeX className="size-6" /> : <Volume2 className="size-6" />}
         </button>
-        <div className={clsx("flex items-center gap-1.5 text-lg font-black", practice ? "text-muted" : "text-heart")} title={practice ? "Practice mode — hearts aren't used" : "Hearts"}>
+        <div className={clsx("flex items-center gap-1.5 text-lg font-black", practice ? "text-muted" : "text-heart")} title={unlimitedHearts ? "Pro — unlimited hearts" : practice ? "Practice mode — hearts aren't used" : "Hearts"}>
           <HeartIcon className="size-7" dim={practice || hearts === 0} /> {practice ? "∞" : hearts}
         </div>
       </div>

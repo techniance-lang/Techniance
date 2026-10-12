@@ -1,8 +1,11 @@
 import { and, desc, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import { ProLockedPage } from "@/components/billing/pro-upsell";
 import { ProblemWorkspace } from "@/components/problem-workspace";
 import { getProblem, problemOfTheDay } from "@/content/problems";
 import { requireUser } from "@/lib/auth";
+import { accessOf } from "@/lib/billing/access";
+import { canAccessProblem } from "@/lib/billing/entitlements";
 import { getDb, schema } from "@/lib/db";
 import { XP } from "@/lib/game/rules";
 
@@ -15,6 +18,16 @@ export default async function ProblemPage({ params }: { params: Promise<{ slug: 
   const problem = getProblem((await params).slug);
   if (!problem) notFound();
   const user = await requireUser();
+  if (!canAccessProblem(accessOf(user), problem.difficulty)) {
+    return (
+      <ProLockedPage
+        title={`${problem.title} is a Pro problem`}
+        reason={`Medium and hard problems are part of Techniance Pro. Easy problems are always free.`}
+        backHref="/practice"
+        backLabel="Back to problems"
+      />
+    );
+  }
   const db = await getDb();
   const subs = await db
     .select()

@@ -18,3 +18,4 @@ public/pyodide/
 .env*.local
 .DS_Store
 npm-debug.log*
+public/sqljs/

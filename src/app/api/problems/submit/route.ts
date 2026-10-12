@@ -2,6 +2,8 @@ import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 import { getProblem, problemOfTheDay } from "@/content/problems";
 import { getCurrentUser } from "@/lib/auth";
+import { accessOf } from "@/lib/billing/access";
+import { canAccessProblem } from "@/lib/billing/entitlements";
 import { getDb, schema } from "@/lib/db";
 import { grantRewards } from "@/lib/game/engine";
 import { XP } from "@/lib/game/rules";
@@ -31,6 +33,7 @@ export async function POST(req: Request) {
 
   const problem = getProblem(body.slug);
   if (!problem) return error("Unknown problem", 404);
+  if (!canAccessProblem(accessOf(user), problem.difficulty)) return error("This problem requires Pro", 402);
   const expectedTotal = problem.samples.length + problem.hidden.length;
   if (body.total !== expectedTotal || body.passed > body.total) return error("Test count mismatch");
   if (body.verdict === "accepted" && body.passed !== body.total) return error("Inconsistent verdict");

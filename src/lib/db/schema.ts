@@ -23,6 +23,20 @@ export const users = sqliteTable("users", {
   leagueTier: integer("league_tier").notNull().default(0),
   onboarded: integer("onboarded", { mode: "boolean" }).notNull().default(false),
   createdAt: integer("created_at").notNull(),
+  // Billing (migration 2). Entitlement is derived from proUntil (see lib/billing/entitlements.ts).
+  plan: text("plan").notNull().default("free"),
+  stripeCustomerId: text("stripe_customer_id"),
+  subscriptionId: text("subscription_id"),
+  subscriptionStatus: text("subscription_status"),
+  subscriptionInterval: text("subscription_interval"),
+  proUntil: integer("pro_until").notNull().default(0),
+  cancelAtPeriodEnd: integer("cancel_at_period_end", { mode: "boolean" }).notNull().default(false),
+  acceptedTermsAt: integer("accepted_terms_at"),
+  emailReminders: integer("email_reminders", { mode: "boolean" }).notNull().default(true),
+  lastReminderDay: text("last_reminder_day"),
+  proFreezeGrantedAt: integer("pro_freeze_granted_at").notNull().default(0),
+  /** lower(username); unique — usernames are case-insensitive. */
+  usernameLower: text("username_lower"),
 });
 
 export const sessions = sqliteTable("sessions", {
@@ -31,6 +45,8 @@ export const sessions = sqliteTable("sessions", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   expiresAt: integer("expires_at").notNull(),
+  createdAt: integer("created_at").notNull().default(0),
+  userAgent: text("user_agent"),
 });
 
 /** Every XP grant. Powers daily goal, heatmap, weekly leagues and quests. */
@@ -121,6 +137,9 @@ export const leagueMemberships = sqliteTable(
     week: text("week").notNull(),
     tier: integer("tier").notNull(),
     result: text("result"), // promoted | demoted | stayed (filled on rollover)
+    /** Leagues are split into cohorts of up to 30 learners per (week, tier). */
+    cohort: integer("cohort").notNull().default(0),
+    weeklyXp: integer("weekly_xp").notNull().default(0),
   },
   (t) => [primaryKey({ columns: [t.userId, t.week] }), index("league_week_tier").on(t.week, t.tier)],
 );
@@ -136,6 +155,94 @@ export const freezeDays = sqliteTable(
   },
   (t) => [primaryKey({ columns: [t.userId, t.day] })],
 );
+
+export const passwordResets = sqliteTable("password_resets", {
+  id: text("id").primaryKey(), // sha256 of the emailed token
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  expiresAt: integer("expires_at").notNull(),
+  usedAt: integer("used_at"),
+});
+
+export const rateLimits = sqliteTable(
+  "rate_limits",
+  {
+    key: text("key").notNull(),
+    windowStart: integer("window_start").notNull(),
+    count: integer("count").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.key, t.windowStart] })],
+);
+
+/** Processed Stripe webhook event ids, for idempotency. */
+export const stripeEvents = sqliteTable("stripe_events", {
+  id: text("id").primaryKey(),
+  type: text("type").notNull(),
+  createdAt: integer("created_at").notNull(),
+});
+
+/** One-time purchases (gem packs). id = Stripe Checkout Session id. */
+export const purchases = sqliteTable("purchases", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  kind: text("kind").notNull(),
+  item: text("item").notNull(),
+  amountCents: integer("amount_cents").notNull(),
+  currency: text("currency").notNull(),
+  createdAt: integer("created_at").notNull(),
+});
+
+export const certificates = sqliteTable("certificates", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  courseSlug: text("course_slug").notNull(),
+  issuedAt: integer("issued_at").notNull(),
+});
+
+/** Server-graded lesson run. answers: JSON {stepIndex: {correct: boolean, tries: number}}. */
+export const lessonAttempts = sqliteTable(
+  "lesson_attempts",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    lessonId: text("lesson_id").notNull(),
+    practice: integer("practice", { mode: "boolean" }).notNull().default(false),
+    startedAt: integer("started_at").notNull(),
+    answers: text("answers").notNull().default("{}"),
+    attempts: integer("attempts").notNull().default(0),
+    mistakes: integer("mistakes").notNull().default(0),
+    completedAt: integer("completed_at"),
+  },
+  (t) => [index("lesson_attempts_user").on(t.userId, t.startedAt)],
+);
+
+/** First accepted solve per user and problem — the idempotency key for problem rewards. */
+export const solvedProblems = sqliteTable(
+  "solved_problems",
+  {
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    problemSlug: text("problem_slug").notNull(),
+    solvedAt: integer("solved_at").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.problemSlug] })],
+);
+
+/** Per-problem counters, updated with each submission (avoids scanning submissions). */
+export const problemStats = sqliteTable("problem_stats", {
+  problemSlug: text("problem_slug").primaryKey(),
+  total: integer("total").notNull().default(0),
+  accepted: integer("accepted").notNull().default(0),
+  solvers: integer("solvers").notNull().default(0),
+});
 
 export type User = typeof users.$inferSelect;
 export type Submission = typeof submissions.$inferSelect;

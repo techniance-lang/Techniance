@@ -1,11 +1,12 @@
-export type Language = "python" | "javascript";
+import type { Language } from "./languages";
 
-export const LANGUAGE_LABEL: Record<Language, string> = {
-  python: "Python 3",
-  javascript: "JavaScript",
-};
+export { LANGUAGE_LABEL, LANGUAGES, type Language } from "./languages";
 
-/** A test for a coding step or problem: feed `input` on stdin, compare stdout to `expected`. */
+/**
+ * A test for a coding step or problem: feed `input` on stdin, compare stdout to `expected`.
+ * SQL: `input` is setup SQL run before the learner's query; stdout is the formatted result set.
+ * HTML/CSS: `input` is a list of DOM probes (see public/workers/web-runner.js); stdout is their answers.
+ */
 export interface TestCase {
   input?: string;
   expected: string;
@@ -96,6 +97,7 @@ export interface Problem {
   constraints: string[];
   samples: (TestCase & { explain?: string })[];
   hidden: TestCase[];
-  starter: Record<Language, string>;
+  /** Starter code per practice language; languages without an entry use a generic template. */
+  starter: Partial<Record<Language, string>>;
   hint?: string;
 }

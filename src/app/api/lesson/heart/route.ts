@@ -1,5 +1,7 @@
 import { eq } from "drizzle-orm";
 import { getCurrentUser } from "@/lib/auth";
+import { accessOf } from "@/lib/billing/access";
+import { hasUnlimitedHearts } from "@/lib/billing/entitlements";
 import { getDb, schema } from "@/lib/db";
 import { MAX_HEARTS, regenHearts } from "@/lib/game/rules";
 import { error, json } from "@/lib/http";
@@ -8,6 +10,7 @@ import { error, json } from "@/lib/http";
 export async function POST() {
   const user = await getCurrentUser();
   if (!user) return error("Not signed in", 401);
+  if (hasUnlimitedHearts(accessOf(user))) return json({ hearts: user.hearts, unlimited: true });
   if (user.hearts <= 0) return json({ hearts: 0 });
   const db = await getDb();
   const now = Date.now();

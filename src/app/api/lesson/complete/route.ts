@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { getLesson, isLessonUnlocked } from "@/content/courses";
 import { getCurrentUser } from "@/lib/auth";
+import { accessOf } from "@/lib/billing/access";
+import { canAccessLevel } from "@/lib/billing/entitlements";
 import { completedLessons, recordLesson } from "@/lib/game/engine";
 import { error, json, parse } from "@/lib/http";
 
@@ -20,6 +22,7 @@ export async function POST(req: Request) {
   const ref = getLesson(lessonId);
   if (!ref) return error("Unknown lesson", 404);
   if (!isLessonUnlocked(lessonId, await completedLessons(user.id))) return error("Lesson is locked", 403);
+  if (!canAccessLevel(accessOf(user), ref.unit.level)) return error("This lesson requires Pro", 402);
 
   const accuracy = Math.round((Math.min(correct, attempts) / attempts) * 100);
   const reward = await recordLesson(user, lessonId, ref.course.slug, accuracy);

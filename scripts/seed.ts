@@ -6,7 +6,7 @@ import { randomUUID } from "node:crypto";
 import { mkdirSync } from "node:fs";
 import { COURSES, courseLessons } from "../src/content/courses";
 import { addDays, dayKey, weekKey } from "../src/lib/game/dates";
-import { MIGRATION } from "../src/lib/db/migration";
+import { migrate } from "../src/lib/db/migration";
 
 const url = process.env.DATABASE_URL ?? "file:./data/techniance.db";
 if (url.startsWith("file:")) mkdirSync("data", { recursive: true });
@@ -16,7 +16,7 @@ const NAMES = ["ada", "linus", "grace", "alan", "margaret", "dennis", "barbara",
 const COLORS = ["#7c5cff", "#ff6b6b", "#2ed47a", "#ffb020", "#3d8bff", "#ff5cc8", "#00c2c7", "#ff8a3d"];
 
 async function main() {
-  await db.executeMultiple(MIGRATION);
+  await migrate(db);
   const hash = await bcrypt.hash("demo1234", 10);
   const now = new Date();
   const today = dayKey(now, "UTC");
