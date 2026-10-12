@@ -1,0 +1,20 @@
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# local database
+data/
+*.db
+*.db-journal
+
+# generated at install time (scripts/copy-pyodide.mjs)
+public/pyodide/
+
+.env
+.env*.local
+.DS_Store
+npm-debug.log*

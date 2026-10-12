@@ -1,0 +1,351 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --bg: #f6f6fb;
+  --surface: #ffffff;
+  --surface-2: #f0f1f8;
+  --surface-3: #e6e8f3;
+  --border: #e1e3ef;
+  --text: #191b31;
+  --muted: #636887;
+  --brand: #7c5cff;
+  --brand-strong: #5a3ddc;
+  --brand-soft: #efeaff;
+  --success: #22c06b;
+  --success-strong: #17964f;
+  --success-soft: #dcfbe9;
+  --danger: #ff4d61;
+  --danger-strong: #d43246;
+  --danger-soft: #ffe4e7;
+  --flame: #ff9600;
+  --flame-strong: #e07a00;
+  --gem: #1cb0f6;
+  --gem-strong: #1491cf;
+  --gold: #ffc800;
+  --gold-strong: #e0a800;
+  --heart: #ff4b6e;
+  --locked: #c9ccdc;
+  --locked-strong: #a9adc2;
+  --code-bg: #f3f4fa;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0d0f1e;
+  --surface: #151830;
+  --surface-2: #1c2040;
+  --surface-3: #262b52;
+  --border: #2a2f57;
+  --text: #eef0ff;
+  --muted: #9298c2;
+  --brand: #8b6dff;
+  --brand-strong: #6448e0;
+  --brand-soft: #2a2457;
+  --success: #2ed47a;
+  --success-strong: #1fa25b;
+  --success-soft: #133a2a;
+  --danger: #ff5d6e;
+  --danger-strong: #cc3a4b;
+  --danger-soft: #3d1a24;
+  --locked: #353a63;
+  --locked-strong: #262a4b;
+  --code-bg: #10132a;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--border);
+  --color-fg: var(--text);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-success: var(--success);
+  --color-success-strong: var(--success-strong);
+  --color-success-soft: var(--success-soft);
+  --color-danger: var(--danger);
+  --color-danger-strong: var(--danger-strong);
+  --color-danger-soft: var(--danger-soft);
+  --color-flame: var(--flame);
+  --color-gem: var(--gem);
+  --color-gold: var(--gold);
+  --color-heart: var(--heart);
+  --color-locked: var(--locked);
+  --color-code: var(--code-bg);
+  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand) 35%, transparent);
+}
+
+/* Component classes live in a layer so Tailwind utilities can override them. */
+@layer components {
+/* ---------- 3D "pressable" buttons ---------- */
+.btn {
+  --btn-bg: var(--brand);
+  --btn-edge: var(--brand-strong);
+  --btn-fg: #fff;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 1rem;
+  padding: 0.75rem 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  box-shadow: 0 4px 0 var(--btn-edge);
+  transition:
+    transform 80ms ease,
+    box-shadow 80ms ease,
+    filter 150ms ease;
+  user-select: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:hover {
+  filter: brightness(1.06);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--btn-edge);
+}
+.btn:disabled {
+  --btn-bg: var(--surface-3) !important;
+  --btn-edge: var(--border) !important;
+  --btn-fg: var(--muted) !important;
+  cursor: not-allowed;
+  filter: none;
+}
+.btn:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--brand) 60%, transparent);
+  outline-offset: 3px;
+}
+.btn-success {
+  --btn-bg: var(--success);
+  --btn-edge: var(--success-strong);
+}
+.btn-danger {
+  --btn-bg: var(--danger);
+  --btn-edge: var(--danger-strong);
+}
+.btn-gem {
+  --btn-bg: var(--gem);
+  --btn-edge: var(--gem-strong);
+}
+.btn-gold {
+  --btn-bg: var(--gold);
+  --btn-edge: var(--gold-strong);
+  --btn-fg: #3a2a00;
+}
+.btn-ghost {
+  --btn-bg: var(--surface);
+  --btn-edge: var(--border);
+  --btn-fg: var(--text);
+  border: 2px solid var(--border);
+}
+.btn-ghost:active:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 var(--btn-edge);
+}
+.btn-sm {
+  padding: 0.5rem 0.875rem;
+  font-size: 0.75rem;
+  border-radius: 0.8rem;
+}
+.btn-lg {
+  padding: 1rem 1.75rem;
+  font-size: 1rem;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 1.25rem;
+}
+
+/* Selectable answer tiles (choice options, word bank) */
+.tile {
+  border: 2px solid var(--border);
+  border-bottom-width: 4px;
+  border-radius: 1rem;
+  background: var(--surface);
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 80ms ease;
+  cursor: pointer;
+}
+.tile:hover:not(:disabled) {
+  background: var(--surface-2);
+}
+.tile:active:not(:disabled) {
+  transform: translateY(2px);
+  border-bottom-width: 2px;
+}
+.tile[data-selected="true"] {
+  border-color: var(--gem);
+  background: color-mix(in srgb, var(--gem) 12%, var(--surface));
+  color: var(--gem);
+}
+.tile[data-state="correct"] {
+  border-color: var(--success);
+  background: var(--success-soft);
+  color: var(--success-strong);
+}
+.tile[data-state="wrong"] {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+  color: var(--danger-strong);
+}
+
+.kbd {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.35rem;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
+
+/* Inline code inside prose */
+.prose-lite code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  padding: 0.05rem 0.35rem;
+}
+.prose-lite p + p,
+.prose-lite p + ul,
+.prose-lite ul + p {
+  margin-top: 0.75rem;
+}
+.prose-lite ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.prose-lite li + li {
+  margin-top: 0.25rem;
+}
+.prose-lite strong {
+  font-weight: 800;
+}
+
+.code-block {
+  font-family: var(--font-mono);
+  background: var(--code-bg);
+  border: 2px solid var(--border);
+  border-radius: 1rem;
+  padding: 1rem 1.1rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  white-space: pre;
+}
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--surface-3) transparent;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.animate-float {
+  animation: float 2.2s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1.08) rotate(2deg);
+  }
+}
+.animate-flicker {
+  animation: flicker 1.4s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+
+@keyframes pop-in {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.animate-pop {
+  animation: pop-in 320ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes shake {
+  10%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  80% {
+    transform: translateX(4px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-6px);
+  }
+  40%,
+  60% {
+    transform: translateX(6px);
+  }
+}
+.animate-shake {
+  animation: shake 450ms ease both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
