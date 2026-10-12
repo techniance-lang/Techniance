@@ -64,6 +64,17 @@ npm run db:seed    # demo accounts use the password demo1234
 | `DATABASE_URL` | `file:./data/techniance.db` | Any libSQL URL, e.g. a [Turso](https://turso.tech) database for serverless hosting |
 | `DATABASE_AUTH_TOKEN` | — | Auth token for remote libSQL |
 
+## Deploying (Vercel + Turso)
+
+Serverless hosts can't keep a SQLite file, so production uses a hosted libSQL database from [Turso](https://turso.tech) (free tier is plenty).
+
+1. **Create the database**: sign up at turso.tech, create a database, then copy its URL (`libsql://…`) and create an auth token. With the CLI: `turso db create techniance`, `turso db show techniance --url`, `turso db tokens create techniance`.
+2. **Import the repo on Vercel**: vercel.com → *Add New → Project* → pick this GitHub repo. The framework preset (Next.js) and build settings are detected automatically.
+3. **Add environment variables** before the first deploy: `DATABASE_URL` = the `libsql://…` URL, `DATABASE_AUTH_TOKEN` = the token.
+4. **Deploy.** Tables are created automatically on the first request. Every push to the production branch redeploys.
+
+Without `DATABASE_URL`, a Vercel deployment still builds, but signing in fails with an error explaining what to set.
+
 ## Project layout
 
 ```
