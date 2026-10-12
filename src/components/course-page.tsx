@@ -4,6 +4,7 @@ import type { Course } from "@/content/types";
 import type { User } from "@/lib/db/schema";
 import { lessonProgressFor } from "@/lib/progress";
 import { getShellData } from "@/lib/shell";
+import { Mascot } from "./brand";
 import { CoursePath } from "./course-path";
 import { RightRail } from "./shell";
 import { ProgressBar } from "./ui";
@@ -37,7 +38,7 @@ export async function CoursePage({ user, course }: { user: User; course: Course 
 
         {!next && (
           <div className="mx-auto mb-10 max-w-xl rounded-2xl border-2 border-gold bg-[color-mix(in_srgb,var(--gold)_12%,transparent)] p-5 text-center">
-            <div className="text-4xl">🏆</div>
+            <Mascot mood="cheer" size={100} className="mx-auto" />
             <h2 className="mt-2 text-xl font-black">Course complete!</h2>
             <p className="mt-1 font-semibold text-muted">Replay lessons for practice XP, or test yourself in the practice arena.</p>
             <Link href="/practice" className="btn btn-gold mt-4">Go to practice</Link>

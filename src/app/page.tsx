@@ -1,5 +1,6 @@
 import { ArrowRight, Check, Code2, Crown, Play, Sparkles, Target, Zap } from "lucide-react";
 import Link from "next/link";
+import { Mascot } from "@/components/brand";
 import { BoltIcon, FlameIcon, GemIcon, HeartIcon, TrophyIcon } from "@/components/icons";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Logo } from "@/components/ui";
@@ -170,9 +171,7 @@ print(best)`}
       {/* CTA */}
       <section className="py-24">
         <div className="mx-auto max-w-3xl px-4 text-center">
-          <div className="mx-auto mb-6 flex w-fit items-center gap-2 animate-float">
-            <FlameIcon className="size-16 animate-flicker" />
-          </div>
+          <Mascot mood="cheer" size={150} className="mx-auto mb-6" bob />
           <h2 className="text-4xl font-black sm:text-5xl">Your streak starts today.</h2>
           <p className="mt-4 text-lg text-muted">Five minutes a day is all it takes. Set a daily goal and we&apos;ll help you stick to it.</p>
           <Link href={primaryHref} className="btn btn-lg mt-8">
@@ -184,7 +183,10 @@ print(best)`}
       <footer className="border-t-2 border-line py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 text-sm text-muted sm:flex-row">
           <Logo />
-          <p>© {new Date().getFullYear()} Techniance. Learn something every day.</p>
+          <p className="flex items-center gap-4">
+            <Link href="/brand" className="font-bold hover:text-fg">Brand</Link>
+            <span>© {new Date().getFullYear()} Techniance. Learn something every day.</span>
+          </p>
         </div>
       </footer>
     </div>
@@ -200,7 +202,7 @@ function HeroMock() {
     { x: -20, chest: true },
   ];
   return (
-    <div className="relative mx-auto w-full max-w-md">
+    <div className="relative mx-auto mt-28 w-full max-w-md md:mt-24">
       <div className="card relative p-5 shadow-2xl shadow-black/20">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5 font-black text-flame"><FlameIcon className="size-6 animate-flicker" /> 12</div>
@@ -238,6 +240,7 @@ function HeroMock() {
           <div className="font-black">+15 XP · 100% accuracy</div>
         </div>
       </div>
+      <Mascot mood="wave" size={100} className="absolute -top-[104px] right-10 hidden sm:block" bob />
       <div className="card absolute -top-6 -left-4 flex items-center gap-2 px-3 py-2 shadow-xl sm:-left-10">
         <TrophyIcon className="size-6" color="#ffc93c" />
         <span className="text-sm font-black">#2 in Gold League</span>

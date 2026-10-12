@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { Language, Step } from "@/content/types";
 import type { Reward } from "@/lib/game/engine";
 import { setSoundEnabled, soundEnabled, sounds } from "@/lib/sound";
+import { Mascot } from "../brand";
 import { HeartIcon } from "../icons";
 import { RewardSequence } from "../rewards";
 import { ProgressBar } from "../ui";
@@ -255,7 +256,7 @@ export function LessonPlayer({
 
       {saveError && (
         <Modal>
-          <div className="text-5xl">⚠️</div>
+          <Mascot mood="think" size={96} className="mx-auto" />
           <h2 className="mt-4 text-2xl font-black">Couldn&apos;t save progress</h2>
           <p className="mt-2 font-semibold text-muted">{saveError}</p>
           <button className="btn mt-6 w-full" onClick={() => { setSaveError(null); void finish(stats); }}>Retry</button>
@@ -265,7 +266,7 @@ export function LessonPlayer({
 
       {outOfHearts && !result && (
         <Modal>
-          <HeartIcon className="mx-auto size-20" dim />
+          <Mascot mood="sad" size={96} className="mx-auto" />
           <h2 className="mt-4 text-2xl font-black">You ran out of hearts</h2>
           <p className="mt-2 font-semibold text-muted">Hearts refill over time, or get a full refill in the shop. Replaying finished lessons never costs hearts.</p>
           <Link href="/shop" className="btn btn-gem mt-6 w-full">Refill hearts</Link>
@@ -275,7 +276,7 @@ export function LessonPlayer({
 
       {confirmQuit && (
         <Modal onClose={() => setConfirmQuit(false)}>
-          <div className="text-5xl">🥺</div>
+          <Mascot mood="sad" size={96} className="mx-auto" />
           <h2 className="mt-4 text-2xl font-black">Wait, don&apos;t go!</h2>
           <p className="mt-2 font-semibold text-muted">You&apos;ll lose your progress in &ldquo;{lessonTitle}&rdquo; if you quit now.</p>
           <button className="btn mt-6 w-full" onClick={() => setConfirmQuit(false)} autoFocus>Keep learning</button>

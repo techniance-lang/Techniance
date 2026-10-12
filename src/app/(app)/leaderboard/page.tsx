@@ -2,6 +2,7 @@ import clsx from "clsx";
 import { and, desc, eq, isNotNull } from "drizzle-orm";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import Link from "next/link";
+import { Mascot } from "@/components/brand";
 import { FlameIcon, TrophyIcon } from "@/components/icons";
 import { Avatar } from "@/components/ui";
 import { requireUser } from "@/lib/auth";
@@ -89,7 +90,7 @@ export default async function LeaderboardPage({ searchParams }: { searchParams: 
 
       {standings.length === 0 || !standings.some((s) => s.userId === user.id) ? (
         <div className="card mt-6 p-8 text-center">
-          <TrophyIcon className="mx-auto size-16" color={league.color} />
+          <Mascot mood="wave" size={110} className="mx-auto" bob />
           <h2 className="mt-4 text-xl font-black">Join this week&apos;s league</h2>
           <p className="mt-1 font-semibold text-muted">Complete a lesson or solve a problem to start competing.</p>
           <Link href="/learn" className="btn mt-5">Start a lesson</Link>

@@ -29,6 +29,12 @@ All code runs **in the learner's browser** — JavaScript in a Web Worker and Py
 - **15 achievements**, a profile with stats and an activity heatmap
 - Celebration screens, confetti, combo counter and synthesized sound effects
 
+**Brand**
+- Logo: a code prompt whose cursor is a streak flame; the same flame dots the *i* in the wordmark
+- Byte, the mascot, with five moods used for greetings, wins, mistakes and empty states
+- Favicon, Apple touch icon, installable-app manifest and a social share card
+- Brand guide at `/brand` (logo usage, mascot, colors, type, voice)
+
 **UX**
 - Light and dark themes, responsive down to phones (bottom navigation on mobile)
 - Keyboard friendly: `1–4` to pick answers, `Enter` to check / continue, `Ctrl/⌘ + Enter` to run code

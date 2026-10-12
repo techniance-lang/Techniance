@@ -1,19 +1,7 @@
 import clsx from "clsx";
-import Link from "next/link";
 import type { ReactNode } from "react";
 
-export function Logo({ className, compact }: { className?: string; compact?: boolean }) {
-  return (
-    <Link href="/" className={clsx("flex items-center gap-2 font-black tracking-tight", className)}>
-      <svg viewBox="0 0 64 64" className="size-9 shrink-0" aria-hidden>
-        <rect width="64" height="64" rx="16" fill="var(--brand)" />
-        <path d="M22 22 12 32l10 10M42 22l10 10-10 10" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M35 14 29 50" stroke="#ffc800" strokeWidth="6" strokeLinecap="round" />
-      </svg>
-      {!compact && <span className="text-2xl text-brand">techniance</span>}
-    </Link>
-  );
-}
+export { Logo } from "./brand";
 
 export function Avatar({ name, color, size = 40, className }: { name: string; color: string; size?: number; className?: string }) {
   return (

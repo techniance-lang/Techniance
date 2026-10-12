@@ -2,14 +2,13 @@ import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono, Nunito } from "next/font/google";
 import "./globals.css";
 
-const nunito = Nunito({ subsets: ["latin"], variable: "--font-nunito", weight: ["400", "600", "700", "800", "900"] });
+const nunito = Nunito({ subsets: ["latin", "latin-ext"], variable: "--font-nunito", weight: ["400", "600", "700", "800", "900"] });
 const jetbrains = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
   title: { default: "Techniance — Learn to code, one streak at a time", template: "%s · Techniance" },
   description:
     "Bite-sized coding lessons, real coding challenges that run in your browser, daily streaks, XP, leagues and achievements. Learn Python, JavaScript and algorithms.",
-  icons: { icon: "/icon.svg" },
 };
 
 export const viewport: Viewport = {

@@ -5,7 +5,7 @@ import { ArrowLeft, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DAILY_GOALS } from "@/lib/game/rules";
-import { FlameIcon } from "./icons";
+import { MascotSays } from "./brand";
 import { ProgressBar } from "./ui";
 
 interface CourseCard {
@@ -52,8 +52,10 @@ export function Onboarding({ name, courses }: { name: string; courses: CourseCar
       <div className="flex flex-1 flex-col py-10">
         {step === 0 ? (
           <>
-            <h1 className="text-3xl font-black">Hi {name}! What do you want to learn?</h1>
-            <p className="mt-2 font-semibold text-muted">You can switch or add courses any time.</p>
+            <MascotSays mood="wave">
+              Hi {name}! I&apos;m Byte. What do you want to learn?
+            </MascotSays>
+            <p className="mt-4 font-semibold text-muted">You can switch or add courses any time.</p>
             <div className="mt-8 grid gap-4 sm:grid-cols-3">
               {courses.map((c) => (
                 <button
@@ -76,13 +78,8 @@ export function Onboarding({ name, courses }: { name: string; courses: CourseCar
           </>
         ) : (
           <>
-            <div className="flex items-center gap-4">
-              <FlameIcon className="size-14 animate-flicker" />
-              <div>
-                <h1 className="text-3xl font-black">Pick a daily goal</h1>
-                <p className="mt-1 font-semibold text-muted">Hit it every day to build your streak.</p>
-              </div>
-            </div>
+            <MascotSays mood="cheer">Great choice! How much do you want to practice each day?</MascotSays>
+            <p className="mt-4 font-semibold text-muted">Hit your goal every day to build a streak. You can change it later.</p>
             <div className="mt-8 space-y-3">
               {DAILY_GOALS.map((g) => (
                 <button

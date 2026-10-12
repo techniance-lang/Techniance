@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Reward } from "@/lib/game/engine";
 import { levelTitle } from "@/lib/game/rules";
 import { sounds } from "@/lib/sound";
+import { Mascot } from "./brand";
 import { BoltIcon, FlameIcon, GemIcon } from "./icons";
 
 function burst() {
@@ -63,7 +64,7 @@ export function RewardSequence({
       <div key={screen} className="mx-auto flex w-full max-w-xl flex-1 flex-col items-center justify-center px-4 py-10 text-center">
         {screen === "summary" && (
           <>
-            <div className="animate-pop text-7xl">🎉</div>
+            <Mascot mood="cheer" size={150} className="animate-pop" />
             <h1 className="mt-6 text-3xl font-black text-gold sm:text-4xl">{title}</h1>
             {reward?.boosted && <p className="mt-2 font-black text-gold">Double XP active!</p>}
             <div className="mt-10 flex w-full flex-wrap justify-center gap-3 [&>*]:w-[calc(50%-0.375rem)] sm:[&>*]:w-32">
