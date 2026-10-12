@@ -35,6 +35,14 @@ All code runs **in the learner's browser** — JavaScript in a Web Worker and Py
 
 ## Getting started
 
+### Try it in your browser (no install)
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/techniance-lang/Techniance?quickstart=1)
+
+Click the badge and then **Create codespace**. The first start takes a few minutes while dependencies install and demo learners are seeded; the app then opens in a new tab (or open the **Ports** tab and click the globe next to port 3000). Codespaces is free for personal accounts up to a monthly limit.
+
+### Run locally
+
 ```bash
 npm install        # also copies the Pyodide runtime into public/pyodide
 npm run dev        # http://localhost:3000
